@@ -21,10 +21,31 @@ const loginUser = async (req, res) => {
 }
 
 const getUsers = async (req, res) => {
+    const userData = req.user;
+    const users = await userService.getUsersService(userData);
 
+    res.status(200).json({
+        status: "success",
+        data: users
+    })
+    
+}
+
+const getSpecificUser = async (req, res) => {
+    const userData = req.user;
+    const userId = req.params.id;
+
+    const user = await userService.getSpecificUserService(userId, userData);
+
+    res.status(200).json({
+        status: "success",
+        data: user
+    })
 }
 
 export default {
     createUser,
-   loginUser
+    loginUser,
+    getUsers,
+    getSpecificUser
 }

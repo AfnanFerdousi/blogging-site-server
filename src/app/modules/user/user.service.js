@@ -30,7 +30,35 @@ const loginUserService = async (loginData) => {
 
 }
 
+const getUsersService = async (userData) => {
+    console.log(userData)
+    if(userData.role !== "admin") {
+     return "Unauthorized access"
+    }
+    const users = await User.find();
+    return users
+}
+
+
+const getSpecificUserService = async (userId, userData) => {
+    if (userData.role === "admin") {
+        const user = await User.findOne({ _id: userId });
+       return user;
+    }
+    if(userData.role === "user") {
+        const user = await User.findOne({ _id: userId });
+        if(user.email !== userData.email) {
+            return "Unauthorized access"
+        }
+        return user;
+    }
+
+    return "Unauthorized access"
+}
+
 export default {
     CreateUserService,
-    loginUserService
+    loginUserService,
+    getUsersService,
+    getSpecificUserService
 }
