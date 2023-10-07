@@ -1,6 +1,7 @@
-import Blog from "./blog.model";
+import Blog from "./blog.model.js";
 
-const CreateBlogService = async (blogData, userData) => {
+const CreateBlogService = async ( userData, blogData) => {
+    console.log(blogData)
     if(!userData) {
         throw new Error("Unauthorized");
     }

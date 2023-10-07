@@ -1,8 +1,10 @@
-const createBlog = async (blogData) => {
-    const userData = req.user;
-    const newBlog = await blogService.CreateBlogService(userData, blogData);
+import blogService from "./blog.service.js";
 
-    res.status(201).json({
+const createBlog = async (req, res) => {
+    const userData = req.user;
+    const newBlog = await blogService.CreateBlogService(userData, req.body);
+console.log(newBlog)
+    res.status(200).json({
         status: "success",
         data: newBlog
     })
@@ -27,6 +29,9 @@ const getSingleBlog = async (req, res) => {
         data: blog
     })
 }
+
+
+
 
 export default {
     createBlog,
