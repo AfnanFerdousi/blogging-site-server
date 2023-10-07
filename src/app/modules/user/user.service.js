@@ -17,7 +17,7 @@ const loginUserService = async (loginData) => {
     if (!user) {
         throw new Error("User does not exist");
     }
-    if(user.password !== loginData.password) {
+    if (user.password !== loginData.password) {
         throw new Error("Incorrect password");
     }
 
@@ -30,30 +30,25 @@ const loginUserService = async (loginData) => {
 
 }
 
-const getUsersService = async (userData) => {
-    console.log(userData)
-    if(userData.role !== "admin") {
-     return "Unauthorized access"
+const getUsersService = async (userData, searchText) => {
+    let query = {};
+
+    if (searchText) {
+        // Case-insensitive search for name or email without regex
+        query.$or = [
+            { name: { $regex: searchText, $options: "i" } },
+            { email: { $regex: searchText, $options: "i" } }
+        ];
     }
-    const users = await User.find();
-    return users
+
+    const users = await User.find(query);
+    return users;
 }
 
 
-const getSpecificUserService = async (userId, userData) => {
-    if (userData.role === "admin") {
-        const user = await User.findOne({ _id: userId });
-       return user;
-    }
-    if(userData.role === "user") {
-        const user = await User.findOne({ _id: userId });
-        if(user.email !== userData.email) {
-            return "Unauthorized access"
-        }
-        return user;
-    }
-
-    return "Unauthorized access"
+const getSpecificUserService = async (userId) => {
+    const user = await User.findOne({ _id: userId }).select("-password");
+    return user;
 }
 
 export default {

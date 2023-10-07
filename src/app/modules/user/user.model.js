@@ -24,6 +24,11 @@ const userSchema = new mongoose.Schema({
         ref: "Blog",
         default: []
     }],
+    sharedBlogs: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Blog",
+        default: []
+    }],
     profileImg: {
         type: String,
         required: true

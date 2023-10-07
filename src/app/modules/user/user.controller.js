@@ -22,7 +22,8 @@ const loginUser = async (req, res) => {
 
 const getUsers = async (req, res) => {
     const userData = req.user;
-    const users = await userService.getUsersService(userData);
+    const {searchText} = req.query;
+    const users = await userService.getUsersService(userData, searchText);
 
     res.status(200).json({
         status: "success",
@@ -32,10 +33,9 @@ const getUsers = async (req, res) => {
 }
 
 const getSpecificUser = async (req, res) => {
-    const userData = req.user;
     const userId = req.params.id;
 
-    const user = await userService.getSpecificUserService(userId, userData);
+    const user = await userService.getSpecificUserService(userId);
 
     res.status(200).json({
         status: "success",
