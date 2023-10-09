@@ -1,17 +1,26 @@
-import Comment from "./comment.model.js"
+import Blog from "../blog/blog.model.js";
+import Comment from "./comment.model.js";
 
 const postCommentService = async (userData, commentData) => {
     const { comment, blog, author } = commentData;
-    if(!userData) {
+    if (!userData) {
         throw new Error("Unauthorized");
     }
-    const res = await Comment.create({
+
+    // Create the new comment
+    const newComment = await Comment.create({
         comment,
         author,
         blog
-    })
+    });
 
-    return res;
+    const updatedBlog = await Blog.findByIdAndUpdate(
+        blog,
+        { $push: { comments: newComment._id } },
+        { new: true } 
+    );
+
+    return { newComment, updatedBlog }; 
 }
 
 export default {

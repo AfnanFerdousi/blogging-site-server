@@ -1,4 +1,5 @@
 import blogService from "./blog.service.js";
+import Comment from "../comment/comment.model.js";
 
 const createBlog = async (req, res) => {
     const userData = req.user;
@@ -30,11 +31,27 @@ const getSingleBlog = async (req, res) => {
     })
 }
 
+const likeBlog = async (req, res) => {
+    const { blogId } = req.params;
 
+    try {
+        const updatedBlog = await blogService.likeBlogService(blogId);
+        res.status(200).json({
+            status: "success",
+            data: updatedBlog
+        });
+    } catch (error) {
+        res.status(404).json({
+            status: "error",
+            message: error.message
+        });
+    }
+};
 
 
 export default {
     createBlog,
     getBlogs,
-    getSingleBlog
+    getSingleBlog,
+    likeBlog
 }
