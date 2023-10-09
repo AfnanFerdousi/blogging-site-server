@@ -1,5 +1,9 @@
 import mongoose from "mongoose";
 
+const ILikeType = {
+    email: String
+}
+
 const blogSchema = new mongoose.Schema({
     title: {
         type: String,
@@ -23,10 +27,11 @@ const blogSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    likes: {
-        type: Number,
-        default: 0
-    },
+    likes: [{
+        type: ILikeType, 
+        required: true,
+        default: []
+    }],
     shares: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",

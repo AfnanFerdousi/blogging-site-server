@@ -34,19 +34,28 @@ const getSingleBlogService = async (blogId) => {
     return blog;
 }
 
-const likeBlogService = async (blogId) => {
-    const updatedBlog = await Blog.findByIdAndUpdate(
-        blogId,
-        { $inc: { likes: 1 } },
-        { new: true }
-    );
+const likeBlogService = async (blogId, userData) => {
+    const blog = await Blog.findById(blogId);
 
-    if (!updatedBlog) {
+    if (!blog) {
         throw new Error("Blog not found");
     }
 
+    const emailIndex = blog.likes.findIndex((like) => like.email === userData.email);
+
+    if (emailIndex === -1) {
+        // Email doesn't exist in the likes array, so add it
+        blog.likes.push({ email: userData.email, name: userData.name });
+    } else {
+        // Email exists in the likes array, so remove it
+        blog.likes.splice(emailIndex, 1);
+    }
+
+    const updatedBlog = await blog.save();
+
     return updatedBlog;
 };
+
 
 
 export default {

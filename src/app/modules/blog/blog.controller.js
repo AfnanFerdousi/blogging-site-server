@@ -32,11 +32,12 @@ const getSingleBlog = async (req, res) => {
 }
 
 const likeBlog = async (req, res) => {
+    const userData = req.user;
     const { id } = req.params;
 
 
     try {
-        const updatedBlog = await blogService.likeBlogService(id);
+        const updatedBlog = await blogService.likeBlogService(id, userData);
         res.status(200).json({
             status: "success",
             data: updatedBlog
