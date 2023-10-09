@@ -1,6 +1,6 @@
 import Blog from "./blog.model.js";
 
-const CreateBlogService = async (userData, blogData) => {
+const createBlogService = async (userData, blogData) => {
     if (!userData) {
         throw new Error("Unauthorized");
     }
@@ -8,7 +8,7 @@ const CreateBlogService = async (userData, blogData) => {
     return newBlog;
 }
 
-const GetBlogService = async (searchText, limit) => {
+const getBlogService = async (searchText, limit) => {
     let query = {};
 
     if (searchText) {
@@ -25,7 +25,7 @@ const GetBlogService = async (searchText, limit) => {
     return blogs;
 }
 
-const GetSingleBlogService = async (blogId) => {
+const getSingleBlogService = async (blogId) => {
     const blog = await Blog.findById(blogId)
         .populate('comments')
         .exec();
@@ -35,7 +35,6 @@ const GetSingleBlogService = async (blogId) => {
 }
 
 const likeBlogService = async (blogId) => {
-    // Find the blog by its ID and update the likes count
     const updatedBlog = await Blog.findByIdAndUpdate(
         blogId,
         { $inc: { likes: 1 } },
@@ -51,8 +50,8 @@ const likeBlogService = async (blogId) => {
 
 
 export default {
-    CreateBlogService,
-    GetBlogService,
-    GetSingleBlogService,
+    createBlogService,
+    getBlogService,
+    getSingleBlogService,
     likeBlogService
 };

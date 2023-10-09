@@ -3,7 +3,7 @@ import Comment from "../comment/comment.model.js";
 
 const createBlog = async (req, res) => {
     const userData = req.user;
-    const newBlog = await blogService.CreateBlogService(userData, req.body);
+    const newBlog = await blogService.createBlogService(userData, req.body);
 console.log(newBlog)
     res.status(200).json({
         status: "success",
@@ -13,7 +13,7 @@ console.log(newBlog)
 
 const getBlogs = async (req, res) => {
     const {searchText, limit} = req.query;
-    const blogs = await blogService.GetBlogService(searchText, limit);
+    const blogs = await blogService.getBlogService(searchText, limit);
 
     res.status(200).json({
         status: "success",
@@ -23,7 +23,7 @@ const getBlogs = async (req, res) => {
 
 const getSingleBlog = async (req, res) => {
     const blogId = req.params.id;
-    const blog = await blogService.GetSingleBlogService(blogId);
+    const blog = await blogService.getSingleBlogService(blogId);
 
     res.status(200).json({
         status: "success",
@@ -32,16 +32,17 @@ const getSingleBlog = async (req, res) => {
 }
 
 const likeBlog = async (req, res) => {
-    const { blogId } = req.params;
+    const { id } = req.params;
+
 
     try {
-        const updatedBlog = await blogService.likeBlogService(blogId);
+        const updatedBlog = await blogService.likeBlogService(id);
         res.status(200).json({
             status: "success",
             data: updatedBlog
         });
     } catch (error) {
-        res.status(404).json({
+        res.status(400).json({
             status: "error",
             message: error.message
         });
