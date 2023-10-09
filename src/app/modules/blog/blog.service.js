@@ -1,3 +1,4 @@
+import User from "../user/user.model.js";
 import Blog from "./blog.model.js";
 
 const createBlogService = async (userData, blogData) => {
@@ -5,7 +6,13 @@ const createBlogService = async (userData, blogData) => {
         throw new Error("Unauthorized");
     }
     const newBlog = await Blog.create(blogData);
-    return newBlog;
+    const updateUser = await User.findOneAndUpdate(
+        { email: userData.email },
+        { $push: { writtenBlogs: newBlog._id } },
+    )
+
+  
+    return {newBlog, updateUser};
 }
 
 const getBlogService = async (searchText, limit) => {
@@ -44,10 +51,8 @@ const likeBlogService = async (blogId, userData) => {
     const emailIndex = blog.likes.findIndex((like) => like.email === userData.email);
 
     if (emailIndex === -1) {
-        // Email doesn't exist in the likes array, so add it
         blog.likes.push({ email: userData.email, name: userData.name });
     } else {
-        // Email exists in the likes array, so remove it
         blog.likes.splice(emailIndex, 1);
     }
 
@@ -57,10 +62,35 @@ const likeBlogService = async (blogId, userData) => {
 };
 
 
+const shareBlogService = async (blogId, userData) => {
+    const blog = await Blog.findById(blogId);
+    if (!blog) {
+        throw new Error("Blog not found");
+    }
+
+    const user = await User.findOne({ email: userData.email });
+    if (!user) {
+        throw new Error("User not found");
+    }
+
+    blog.shares.push(user._id);
+    await blog.save();
+
+    const userUpdate = await User.findOneAndUpdate(
+        { email: userData.email },
+        { $push: { sharedBlogs: blogId } },
+        { new: true } 
+    );
+
+    return { blog, userUpdate };
+};
+
+
 
 export default {
     createBlogService,
     getBlogService,
     getSingleBlogService,
-    likeBlogService
+    likeBlogService,
+    shareBlogService
 };

@@ -41,13 +41,23 @@ const getUsersService = async (userData, searchText) => {
         ];
     }
 
-    const users = await User.find(query);
+    const users = await User.find(query)
+        .select("-password")
+        .populate("writtenBlogs")
+        .populate("sharedBlogs")
+        .exec();
+    
     return users;
 }
 
 
 const getSpecificUserService = async (userId) => {
-    const user = await User.findOne({ _id: userId }).select("-password");
+    const user = await User.findOne({ _id: userId })
+        .select("-password")
+        .populate("writtenBlogs")
+        .populate("sharedBlogs")
+        .exec();
+    
     return user;
 }
 

@@ -1,10 +1,10 @@
 import blogService from "./blog.service.js";
-import Comment from "../comment/comment.model.js";
 
 const createBlog = async (req, res) => {
     const userData = req.user;
     const newBlog = await blogService.createBlogService(userData, req.body);
-console.log(newBlog)
+
+  
     res.status(200).json({
         status: "success",
         data: newBlog
@@ -50,10 +50,22 @@ const likeBlog = async (req, res) => {
     }
 };
 
+const shareBlog = async (req, res) => {
+    const userData = req.user;
+    const { id } = req.params;
+    const shareBlog = await blogService.shareBlogService(id, userData);
+
+    res.status(200).json({
+        status: "success",
+        data: shareBlog
+    })
+}
+
 
 export default {
     createBlog,
     getBlogs,
     getSingleBlog,
-    likeBlog
+    likeBlog,
+    shareBlog
 }
