@@ -3,6 +3,7 @@ import { verifyToken } from "../../helpers/jwtHelpers.js";
 const auth = (...roles) => (req, res, next) => {
     try {
         const token = req.headers.authorization;
+        console.log(req.headers)
         if (!token) {
             throw new Error("Unauthorized");
         }

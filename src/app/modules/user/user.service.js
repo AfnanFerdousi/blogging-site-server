@@ -18,14 +18,15 @@ const loginUserService = async (loginData) => {
         throw new Error("User does not exist");
     }
     if (user.password !== loginData.password) {
-        throw new Error("Incorrect password");
+        console.log("Incorrect password");
     }
 
-    const { email, role } = user;
+    const { email, role, _id } = user;
     const accessToken = createToken({ email, role }, process.env.JWT_SECRET, "1h");
 
     return {
-        accessToken
+        accessToken,
+        _id
     }
 
 }
@@ -51,8 +52,8 @@ const getUsersService = async (userData, searchText) => {
 }
 
 
-const getSpecificUserService = async (userId) => {
-    const user = await User.findOne({ _id: userId })
+const getSpecificUserService = async (email) => {
+    const user = await User.findOne({ email: email })
         .select("-password")
         .populate("writtenBlogs")
         .populate("sharedBlogs")

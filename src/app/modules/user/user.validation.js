@@ -14,9 +14,6 @@ export const signupValidation = z.object({
         password: z.string({
             required_error: "Password is required"
         }),
-        role: z.string({
-            required_error: "Role is required"
-        }),
         profileImg: z.string({
             required_error: "Profile image is required"
         })

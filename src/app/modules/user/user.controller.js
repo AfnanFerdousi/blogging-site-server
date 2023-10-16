@@ -33,9 +33,9 @@ const getUsers = async (req, res) => {
 }
 
 const getSpecificUser = async (req, res) => {
-    const userId = req.params.id;
+    const email = req.params.email;
 
-    const user = await userService.getSpecificUserService(userId)
+    const user = await userService.getSpecificUserService(email)
 
     res.status(200).json({
         status: "success",

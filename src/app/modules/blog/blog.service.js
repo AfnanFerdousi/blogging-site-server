@@ -27,7 +27,8 @@ const getBlogService = async (searchText, limit) => {
 
     const blogs = await Blog.find(query)
         .limit(limit)
-        .populate('comments');
+        .populate('comments')
+        .populate('author');
 
     return blogs;
 }
@@ -35,6 +36,7 @@ const getBlogService = async (searchText, limit) => {
 const getSingleBlogService = async (blogId) => {
     const blog = await Blog.findById(blogId)
         .populate('comments')
+        .populate('author')
         .exec();
 
 

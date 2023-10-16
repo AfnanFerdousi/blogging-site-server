@@ -7,20 +7,23 @@ const postCommentService = async (userData, commentData) => {
         throw new Error("Unauthorized");
     }
 
-    // Create the new comment
+    // Create the new comment with author population
     const newComment = await Comment.create({
         comment,
-        author,
+        author, // Assuming author is an ObjectId referencing a User document
         blog
     });
+
+    // Populate the author field in the newComment
+    await newComment.populate("author")
 
     const updatedBlog = await Blog.findByIdAndUpdate(
         blog,
         { $push: { comments: newComment._id } },
-        { new: true } 
+        { new: true }
     );
 
-    return { newComment, updatedBlog }; 
+    return { newComment, updatedBlog };
 }
 
 export default {
